@@ -1,0 +1,9 @@
+spring:
+  rabbitmq:
+    host: 192.168.10.252
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: whportal
+server:
+  port: 8888
