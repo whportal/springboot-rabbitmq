@@ -32,4 +32,20 @@ public class RabbitmqProducerTest {
         User user = new User(18, "风清扬", "华山");
         rabbitTemplate.convertAndSend("testDirectExchange", "mail",user);
     }
+
+    @Test
+    public void sendTopicMessage() {
+        rabbitTemplate.convertAndSend("topicExchange", "topic.man", "这是一条Topic消息");
+    }
+
+    @Test
+    public void sendFanoutMessage() {
+        rabbitTemplate.convertAndSend("fanoutExchange",null,"这是一条Fanout消息");
+    }
+
+    @Test
+    public void sendNotExistExchange() {
+        // 发送消息到一个不存在的交换机上
+        rabbitTemplate.convertAndSend("notExistExchange",null,"发送消息到一个不存在的交换机上");
+    }
 }

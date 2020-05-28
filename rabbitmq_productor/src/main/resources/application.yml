@@ -4,6 +4,11 @@ spring:
     port: 5672
     username: admin
     password: admin
+    # 配置虚拟host 不配置的话使用的是默认host
     virtual-host: whportal
+    # 配置 确认消息已发送到交换机
+    publisher-confirms: true
+    # 配置 确认消息已发送到队列
+    publisher-returns: true
 server:
   port: 8888

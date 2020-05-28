@@ -29,10 +29,6 @@ public class RabbitmqConfig {
         return queue;
     }
 
-    /**
-     * 创建队列 并绑定到交换机上
-     * @return
-     */
     @Bean
     public Queue getMailQueue2() {
         Queue queue = new Queue("mail_queue_2", true);
@@ -78,5 +74,74 @@ public class RabbitmqConfig {
         return new Jackson2JsonMessageConverter();
     }
 
+
+    /**
+     * 创建Topic交换机
+     * @return
+     */
+    @Bean
+    public Exchange getTopicExchange() {
+        Exchange topicExchange = ExchangeBuilder.topicExchange("topicExchange").durable(true).build();
+        amqpAdmin.declareExchange(topicExchange);
+        return topicExchange;
+    }
+
+    /**
+     * 创建一个Queue绑定到topicExchange上 只有routingKey为topic.man时消息才会发到该队列上
+     * @return
+     */
+    @Bean
+    public Queue getTopicQueue1() {
+        Queue queue = QueueBuilder.durable("topicQueue-1").build();
+        amqpAdmin.declareQueue(queue);
+        Binding binding = BindingBuilder.bind(queue).to(getTopicExchange()).with("topic.man").noargs();
+        amqpAdmin.declareBinding(binding);
+        return queue;
+    }
+
+    /**
+     * 创建一个Queue绑定到topicExchange上 只有routingKey为topic.开头的消息都会发到该队列上
+     * @return
+     */
+    @Bean
+    public Queue getTopicQueue2() {
+        Queue queue = QueueBuilder.durable("topicQueue-2").build();
+        amqpAdmin.declareQueue(queue);
+        Binding binding = BindingBuilder.bind(queue).to(getTopicExchange()).with("topic.#").noargs();
+        amqpAdmin.declareBinding(binding);
+        return queue;
+    }
+
+    /**
+     * 创建一个FanoutExchange并绑定三个队列
+     * @return
+     */
+    @Bean
+    public FanoutExchange getFanoutExchange() {
+
+        // 创建一个FanoutExchange交换机并声明
+        FanoutExchange fanoutExchange = new FanoutExchange("fanoutExchange", true, false);
+        amqpAdmin.declareExchange(fanoutExchange);
+
+        // 创建队列1并绑定到交换机上
+        Queue fanoutQueue1 = QueueBuilder.durable("fanoutQueue-1").build();
+        amqpAdmin.declareQueue(fanoutQueue1);
+        Binding binding1 = BindingBuilder.bind(fanoutQueue1).to(fanoutExchange);
+        amqpAdmin.declareBinding(binding1);
+
+        // 创建队列2并绑定到交换机上
+        Queue fanoutQueue2 = QueueBuilder.durable("fanoutQueue-2").build();
+        amqpAdmin.declareQueue(fanoutQueue2);
+        Binding binding2 = BindingBuilder.bind(fanoutQueue2).to(fanoutExchange);
+        amqpAdmin.declareBinding(binding2);
+
+        // 创建队列3并绑定到交换机上
+        Queue fanoutQueue3 = QueueBuilder.durable("fanoutQueue-3").build();
+        amqpAdmin.declareQueue(fanoutQueue3);
+        Binding binding3 = BindingBuilder.bind(fanoutQueue3).to(fanoutExchange);
+        amqpAdmin.declareBinding(binding3);
+
+        return fanoutExchange;
+    }
 
 }
