@@ -20,10 +20,10 @@ node {
         def imageName = "${project_name}:${tag}"
 
         // 编译安装公共工程
-        // sh "mvn -f common clean install"
+		// sh "mvn clean install -Dmaven.test.skip=true -pl common -am"
 
-        // 编译构建本地镜像
-        sh "mvn -f ${project_name} clean package -Dmaven.test.skip=true dockerfile:build"
+        // 编译构建本地镜像 -pl --projects<arg>构建指定的模块 模块之间用逗号分隔  -am --also-make 同时构建所列模块的依赖模块
+        sh "mvn clean package -Dmaven.test.skip=true -pl ${project_name} -am dockerfile:build"
 
 		// 给镜像打标签
 		sh "docker tag ${imageName} ${harbor_url}/${harbor_project_name}/${imageName}"
