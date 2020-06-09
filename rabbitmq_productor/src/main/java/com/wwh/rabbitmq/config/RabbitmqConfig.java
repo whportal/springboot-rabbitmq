@@ -151,6 +151,7 @@ public class RabbitmqConfig {
     public RabbitTemplate getRabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate();
         rabbitTemplate.setConnectionFactory(connectionFactory);
+        rabbitTemplate.setMessageConverter(getMessageConverter());
         // 设置开启Mandatory才能触发回调函数 无论消息推送结果怎么样都强制调用回调函数
         rabbitTemplate.setMandatory(true);
 

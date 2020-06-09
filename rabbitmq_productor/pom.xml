@@ -5,8 +5,7 @@
     <parent>
         <groupId>org.example</groupId>
         <artifactId>rabbitmq_demo</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>1.0-SNAPSHOT</version><!-- lookup parent from repository -->
     </parent>
     <groupId>com.wwh</groupId>
     <artifactId>rabbitmq_productor</artifactId>
@@ -45,4 +44,45 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!--    打包springboot jar包插件        -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--    docker镜像构建插件        -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.10</version>
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>default</id>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                            <goal>push</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+                <configuration>
+                    <tag>${project.version}</tag>
+                    <repository>${project.groupId}/${project.artifactId}</repository>
+                    <noCache>true</noCache>
+                    <buildArgs>
+                        <!--提供参数向Dockerfile传递-->
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
