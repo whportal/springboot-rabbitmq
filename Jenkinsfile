@@ -19,6 +19,8 @@ node {
         // 定义镜像名称
         def imageName = "${project_name}:${tag}"
 
+		sh "echo ${imageName}"
+
         // 编译安装公共工程
 		// sh "mvn clean install -Dmaven.test.skip=true -pl common -am"
 
