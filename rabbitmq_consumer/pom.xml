@@ -79,6 +79,7 @@
                 <!--                    </execution>-->
                 <!--                </executions>-->
                 <configuration>
+                    <contextDirectory>${project.basedir}</contextDirectory>
                     <tag>${project.version}</tag>
                     <repository>${project.groupId}/${project.artifactId}</repository>
                     <noCache>true</noCache>
@@ -86,6 +87,7 @@
                         <!--提供参数向Dockerfile传递-->
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
+                    <dockerfile>Dockerfile</dockerfile>
                 </configuration>
             </plugin>
         </plugins>
