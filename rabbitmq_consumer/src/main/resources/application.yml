@@ -5,5 +5,7 @@ spring:
     username: admin
     password: admin
     virtual-host: whportal
+  profiles:
+    active: dev
 server:
   port: 9999
